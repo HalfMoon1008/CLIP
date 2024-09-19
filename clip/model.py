@@ -4,6 +4,7 @@ import torch
 
 # Bottleneck 클래스는 ResNet과 같은 네트워크에서 사용되는 기본 블록
 # 1x1, 3x3, 1x1의 세 개의 합성곱 층을 통해 입력을 처리
+# 사실상 CNN인데, 이름만 Bottleneck
 class Bottleneck(nn.Module):
     expansion = 4 # 출력 채널 수 확장을 위한 계수, 일반적으로 4로 설정
 
