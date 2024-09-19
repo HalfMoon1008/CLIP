@@ -4,7 +4,10 @@ import torch
 
 # Bottleneck 클래스는 ResNet과 같은 네트워크에서 사용되는 기본 블록
 # 1x1, 3x3, 1x1의 세 개의 합성곱 층을 통해 입력을 처리
+
 # 사실상 CNN인데, 이름만 Bottleneck
+# 1. 1x1을 사용하여 차원 축소 및 복원을 열심히 함(리소스의 자원 문제)
+# 2. CNN에는 없는 잔차연결
 class Bottleneck(nn.Module):
     expansion = 4 # 출력 채널 수 확장을 위한 계수, 일반적으로 4로 설정
 
@@ -53,10 +56,10 @@ class Bottleneck(nn.Module):
         out = self.avgpool(out)  # 평균 풀링 적용
         out = self.bn3(self.conv3(out))
 
-        # 다운샘플링이 필요하면, identity 값을 다운샘플링
+        # 잔차 연결: downsample이 필요하면 identity에 downsample을 적용하여 입력의 차원을 맞춰줌
         if self.downsample is not None:
             identity = self.downsample(x)
 
-        out += identity  # 스킵 연결로 identity를 더함
+        out += identity  # 변환된 출력에 identity (입력)을 더함 (이 부분이 잔차 연결을 의미)
         out = self.relu3(out)  # 최종 활성화 함수 적용
         return out
